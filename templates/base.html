@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+{% load static %} <!-- New line -->
+{% load i18n %}
+{% load settings_value %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{% block title %}{% settings_value "APP_DISPLAY_NAME" %} {% endblock %}</title>
+		<!-- CSS -->
+		<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}" />
+		<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-select.min.css" %}">
+		<link rel="stylesheet" href="{% static "css/myfi.css" %}" />
+		<!-- JavaScript -->
+		<script type="text/javascript">
+			var switchTo5x = true;
+		</script>
+		<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+		<script type="text/javascript" src="http://s.sharethis.com/loader.js"></script>
+		<script src="{% static "js/jquery-1.10.2.min.js" %}"></script>
+		<script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+		<script type="text/javascript" src="{% static "js/bootstrap-select.min.js" %}" ></script>
+		<script src="{% static "js/myfi.js" %}"></script>
+		<script>
+			$(document).ready(function() {
+				$("[name='language'] option").filter(function() {
+					return ($(this).val() == "{{ LANGUAGE_CODE}}");
+				}).attr('selected', true);
+				$('.selectpicker').selectpicker();
+			});
+		</script>
+		<script type="text/javascript">
+			stLight.options({
+				publisher : "11164797-9eb6-4b92-b9f5-5350402f979f",
+				doNotHash : false,
+				doNotCopy : false,
+				hashAddressBar : false
+			});
+		</script>
+		<script>
+			var options = {
+				"publisher" : "11164797-9eb6-4b92-b9f5-5350402f979f",
+				"position" : "left",
+				"ad" : {
+					"visible" : false,
+					"openDelay" : 5,
+					"closeDelay" : 0
+				},
+				"chicklets" : {
+					"items" : ["facebook", "twitter", "linkedin", "pinterest", "googleplus", "email", "sharethis"]
+				}
+			};
+			var st_hover_widget = new sharethis.widgets.hoverbuttons(options);
+		</script>
+		<meta name="generator" content="TextMate http://macromates.com/">
+		<meta name="author" content="Luis C. Berrocal">
+		<!-- Date: 2013-10-20 -->
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-bar-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a href="{% url 'home' %}" id="home-link"  class="navbar-brand"> <img src="{% static "images/myfi-logo-simple-center.png" %}" alt="MyFi Icon"
+					height="60px"/> </a>
+				</div>
+				<div class="collapse navbar-collapse" id="nav-bar-1">
+					<ul class="nav navbar-nav">
+
+						<li>
+							<a href="/admin/">Admin</a>
+						</li>
+						<li>
+							{% language LANGUAGE_CODE %}
+							<a href="{% url 'products' %}">{% trans "Prices"%}</a>
+							{% endlanguage %}
+						</li>
+						<li>
+							{% language LANGUAGE_CODE %}
+							<a href="{% url 'faqs' %}">{% trans "FAQs"%}</a>
+							{% endlanguage %}
+						</li>
+
+						<li>
+							{% if user.is_authenticated %}
+							<a href="/accounts/logout/?next=/">{% trans "Logout"%} {{ user }}</a>
+							{% else %}
+							<a href="/accounts/login/?next=/">{% trans "Login"%}</a>
+							{% endif %}
+						</li>
+					</ul>
+				
+					<form action="/i18n/setlang/" method="post" class="navbar-form navbar-left" id="frm-language">
+					{% csrf_token %}
+					<div class="form-group">
+					<input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}" />
+					<select name="language" class="selectpicker">
+					{% for lang in LANGUAGES %}
+					<option value="{{ lang.0 }}">{{ lang.1 }}</option>
+					{% endfor %}
+					</select>
+					</div>
+					<input class="btn btn-primary" type="submit" value="{% trans "Go"%}" />
+					</form>
+				
+				</div>
+
+			</nav>
+		</div>
+
+		<div id="content" class="container">
+			{% block content %}{% endblock %}
+		</div>
+		<div id="footer" class="container">
+			{% block footer %}
+			<div>
+				{% trans "Version" %} 1.2.5
+			</div>
+			{% endblock %}
+		</div>
+	</body>
+</html>
