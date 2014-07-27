@@ -20,7 +20,7 @@ TEMPORARY_DIR = join(DJANGO_ROOT, 'temporary')
 TEMPLATES = {
     'allauth': {
         'HTML_TEMPLATE_DIR': [
-            normpath(join(DJANGO_ROOT, 'templates/allauth/html/accounts')),
+            normpath(join(DJANGO_ROOT, 'templates/allauth/html/account')),
             normpath(join(DJANGO_ROOT, 'templates/allauth/html/registration')),
             ]
     }
