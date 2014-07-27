@@ -1,4 +1,5 @@
 media/
+temporary/
 test_images/
 # Python bytecode:
 *.py[co]
